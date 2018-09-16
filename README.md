@@ -1,2 +1,23 @@
 # EagerExecutionDemo
 The project gives an example on how to use eager execution to train mnist model
+
+## How to generate dataset
+generate mnist dataset in tfrecord format with the following command
+
+```Bash
+python3 create_dataset.py
+```
+
+## How to train model
+train LeNet with the following command
+
+```Bash
+python3 train_mnist.py
+```
+
+## monitor the training with tensorboard
+monitor the training process with command
+
+```Bash
+tensorboard --logdir model
+```
