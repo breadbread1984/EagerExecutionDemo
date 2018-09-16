@@ -73,9 +73,9 @@ def main(unused_argv):
                         grads = tape.gradient(loss,model.variables);
                         optimizer.apply_gradients(zip(grads,model.variables),global_step = tf.train.get_global_step());
                         if batch % 100 == 0: print('Step #%d\tLoss: %.6f' % (batch,loss));
+                #save model once every epoch
+                checkpoint.save(os.path.join('model','ckpt'));
                 if loss < 0.01: break;
-        #save model
-        checkpoint.save(os.path.join('model','ckpt'));
         #test model
         print("testing");
         accuracy = tfe.metrics.Accuracy('accuracy',dtype = tf.float32);
