@@ -5,8 +5,6 @@ import numpy as np;
 import tensorflow as tf;
 import tensorflow.contrib.eager as tfe;
 
-batch_size = 100;
-
 class MNISTModel(tf.keras.Model):
         def __init__(self):
                 super(MNISTModel,self).__init__();
