@@ -15,6 +15,15 @@ train LeNet with the following command
 python3 train_mnist.py
 ```
 
+## How to predict with trained model
+an example is given in predict.py. you can run it with
+
+```Base
+python3 predict.py
+```
+
+the predicted class of the input image will be printed on the console.
+
 ## monitor the training with tensorboard
 monitor the training process with command
 
