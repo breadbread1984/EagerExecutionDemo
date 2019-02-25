@@ -56,8 +56,7 @@ def main():
         if loss < 0.01: break;
     #eager execution mode has no graph, therefore we can only save model weights but the whole model
     if False == os.path.exists('model'): os.mkdir('model');
-    #model.save_weights('./model/mnist_model');
-    tf.saved_model.save(model,'./model/mnist_model');
+    model.save_weights('./model/mnist_model');
     #test model
     print("testing");
     accuracy = tf.keras.metrics.Accuracy(name = 'accuracy', dtype = tf.float32);
