@@ -3,7 +3,6 @@
 import os;
 import numpy as np;
 import tensorflow as tf;
-from tensorflow.python.ops import summary_ops_v2;
 from MNISTModel import MNISTModel;
 
 def parse_function(serialized_example):
@@ -46,7 +45,7 @@ def main():
             #write log
             if tf.equal(optimizer.iterations % 100, 0):
                 with log.as_default():
-                    summary_ops_v2.scalar('loss',avg_loss.result(), step = optimizer.iterations);
+                    tf.summary.scalar('loss',avg_loss.result(), step = optimizer.iterations);
                 print('Step #%d Loss: %.6f' % (optimizer.iterations,avg_loss.result()));
                 avg_loss.reset_states();
             grads = tape.gradient(loss,model.variables);
