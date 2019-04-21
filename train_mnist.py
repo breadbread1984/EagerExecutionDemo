@@ -25,7 +25,6 @@ def main():
     optimizer = tf.keras.optimizers.Adam(1e-3);
     #load dataset
     trainset = tf.data.TFRecordDataset(os.path.join('dataset','trainset.tfrecord')).map(parse_function).shuffle(100).batch(100);
-    testset = tf.data.TFRecordDataset(os.path.join('dataset','testset.tfrecord')).map(parse_function).batch(100);
     #restore from existing checkpoint
     if False == os.path.exists('checkpoints'): os.mkdir('checkpoints');
     checkpoint = tf.train.Checkpoint(model = model,optimizer = optimizer, optimizer_step = optimizer.iterations);
@@ -56,15 +55,6 @@ def main():
     #eager execution mode has no graph, therefore we can only save model weights but the whole model
     if False == os.path.exists('model'): os.mkdir('model');
     model.save_weights('./model/mnist_model');
-    #test model
-    print("testing");
-    accuracy = tf.keras.metrics.Accuracy(name = 'accuracy', dtype = tf.float32);
-    for (images,labels) in testset:
-        onehot_labels = tf.one_hot(labels,10);
-        logits = model(images);
-        loss = tf.math.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(onehot_labels,logits));
-        accuracy.update_state(tf.argmax(logits,axis = 1,output_type = tf.int64),tf.cast(labels,tf.int64));
-    print('Accuracy: %.6f' % (accuracy.result()));
 
 if __name__ == "__main__":
     

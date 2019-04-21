@@ -25,3 +25,17 @@ class MNISTModel(tf.keras.Model):
 		result = self.dense2(result);
 		return result;
 
+if __name__ == "__main__":
+
+        model = MNISTModel();
+        model.load_weights('./model/mnist_model');
+        import sys;
+        import cv2;
+        assert len(sys.argv) == 2;
+        img_path = sys.argv[1];
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE);
+        assert img is not None;
+        img = img[np.newaxis,...,np.newaxis].astype(np.float32);
+        output = tf.nn.softmax(model.predict(img, batch_size = 1)).numpy();
+        print(np.argmax(output));
+

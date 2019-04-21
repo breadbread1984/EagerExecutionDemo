@@ -19,7 +19,7 @@ python3 train_mnist.py
 an example is given in predict.py. you can run it with
 
 ```Base
-python3 predict.py
+python3 MNISTModel.py <grayscale img of size 28x28>
 ```
 
 the predicted class of the input image will be printed on the console.
