@@ -22,8 +22,7 @@ def parse_function(serialized_example):
 def main():
 
         # create model and load trained model
-        model = MNISTModel();
-        model.load_weights('./model/mnist_model');
+        model = tf.keras.models.load_model('./model/mnist_model.h5');
         # load dataset
         testset = tf.data.TFRecordDataset(os.path.join('dataset','testset.tfrecord')).map(parse_function).batch(100);
         # test accuracy
@@ -39,3 +38,4 @@ if __name__ == "__main__":
 
         assert tf.executing_eagerly();
         main();
+

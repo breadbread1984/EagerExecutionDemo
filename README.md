@@ -15,6 +15,13 @@ train LeNet with the following command
 python3 train_mnist.py
 ```
 
+## How to test model
+test LeNet with the following command
+
+```Base
+python3 test_mnist.py
+```
+
 ## How to predict with trained model
 an example is given in predict.py. you can run it with
 

@@ -52,9 +52,9 @@ def main():
         #save model once every epoch
         checkpoint.save(os.path.join('checkpoints','ckpt'));
         if loss < 0.01: break;
-    #eager execution mode has no graph, therefore we can only save model weights but the whole model
+    #save the network structure with weights
     if False == os.path.exists('model'): os.mkdir('model');
-    model.save_weights('./model/mnist_model');
+    model.save('./model/mnist_model.h5');
 
 if __name__ == "__main__":
     
