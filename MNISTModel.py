@@ -17,8 +17,7 @@ def MNISTModel():
 
 if __name__ == "__main__":
 
-        model = MNISTModel();
-        model.load_weights('./model/mnist_model');
+        model = tf.keras.models.load_model('./model/mnist_model.h5');
         import sys;
         import cv2;
         assert len(sys.argv) == 2;
