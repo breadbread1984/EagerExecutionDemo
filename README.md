@@ -31,9 +31,16 @@ python3 MNISTModel.py <grayscale img of size 28x28>
 
 the predicted class of the input image will be printed on the console.
 
-## monitor the training with tensorboard
+## How to monitor the training with tensorboard
 monitor the training process with command
 
 ```Bash
 tensorboard --logdir model
+```
+
+## How to serve the model
+executing the command
+
+```Bash
+bash start_serving.sh
 ```

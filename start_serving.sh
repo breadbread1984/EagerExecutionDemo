@@ -8,5 +8,5 @@ sudo apt install tensorflow-model-server
 
 python3 convert_model.py
 saved_model_cli show --dir ./serving_model --all # checkout output model
-saved_model_cli run --dir ./serving_model --tag_set serve --signature_def serving_default --input_exp 'input_image=np.random.normal(size=(1,28,28,1))' # test serving
+saved_model_cli run --dir ./serving_model --tag_set serve --signature_def serving_default --input_exp 'input_1=np.random.normal(size=(1,28,28,1))' # test serving
 
