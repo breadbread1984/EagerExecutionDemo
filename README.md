@@ -44,3 +44,13 @@ executing the command
 ```Bash
 bash start_serving.sh
 ```
+
+## How to test the server
+executing the command
+
+```Base
+python3 send_request.py
+```
+
+to send input tensor data to URI, and get return tensor.
+
