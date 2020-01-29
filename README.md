@@ -1,6 +1,20 @@
 # EagerExecutionDemo
 The project gives an example on how to use eager execution to train mnist model. Eager execution is a new mode provided by Tensorflow for machine learning researchers. The mode greatly facilitates network debugging and gradient manipulation. Hope the example can help tensorflow developers with their projects.
 
+## How to plot network structure
+in order to show the structure of the network, you need to install some packages with the following command
+
+```bash
+sudo apt install python3-pydot python3-pygraphviz
+```
+
+plot the network structure with
+
+```bash
+python3 MNISTModel.py
+display model.png
+```
+
 ## How to generate dataset
 generate mnist dataset in tfrecord format with the following command
 
