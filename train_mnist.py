@@ -5,6 +5,8 @@ import numpy as np;
 import tensorflow as tf;
 from MNISTModel import MNISTModel;
 
+batch_size = 100;
+
 def parse_function(serialized_example):
     feature = tf.io.parse_single_example(
         serialized_example,
@@ -22,9 +24,9 @@ def parse_function(serialized_example):
 def main():
     #create model and optimizer
     model = MNISTModel();
-    optimizer = tf.keras.optimizers.Adam(1e-3);
+    optimizer = tf.keras.optimizers.Adam(tf.keras.optimizers.schedules.ExponentialDecay(1e-3, decay_steps = 60000, decay_rate = 0.9));
     #load dataset
-    trainset = tf.data.TFRecordDataset(os.path.join('dataset','trainset.tfrecord')).map(parse_function).shuffle(100).batch(100);
+    trainset = iter(tf.data.TFRecordDataset(os.path.join('dataset','trainset.tfrecord')).map(parse_function).shuffle(batch_size).batch(batch_size).prefetch(tf.data.experimental.AUTOTUNE));
     #restore from existing checkpoint
     if False == os.path.exists('checkpoints'): os.mkdir('checkpoints');
     checkpoint = tf.train.Checkpoint(model = model,optimizer = optimizer, optimizer_step = optimizer.iterations);
@@ -35,22 +37,23 @@ def main():
     print("training");
     avg_loss = tf.keras.metrics.Mean(name = 'loss', dtype = tf.float32);
     while True:
-        for (images,labels) in trainset:
-            with tf.GradientTape() as tape:
-                onehot_labels = tf.one_hot(labels,10);
-                logits = model(images);
-                loss = tf.math.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(onehot_labels,logits));
-                avg_loss.update_state(loss);
-            #write log
-            if tf.equal(optimizer.iterations % 100, 0):
-                with log.as_default():
-                    tf.summary.scalar('loss',avg_loss.result(), step = optimizer.iterations);
-                print('Step #%d Loss: %.6f' % (optimizer.iterations,avg_loss.result()));
-                avg_loss.reset_states();
-            grads = tape.gradient(loss,model.trainable_variables);
-            optimizer.apply_gradients(zip(grads,model.trainable_variables));
-        #save model once every epoch
-        checkpoint.save(os.path.join('checkpoints','ckpt'));
+        (images,labels) = next(trainset);
+        with tf.GradientTape() as tape:
+            onehot_labels = tf.one_hot(labels,10);
+            logits = model(images);
+            loss = tf.math.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(onehot_labels,logits));
+        avg_loss.update_state(loss);
+        #write log
+        if tf.equal(optimizer.iterations % 100, 0):
+            with log.as_default():
+                tf.summary.scalar('loss',avg_loss.result(), step = optimizer.iterations);
+            print('Step #%d Loss: %.6f' % (optimizer.iterations,avg_loss.result()));
+            avg_loss.reset_states();
+        grads = tape.gradient(loss,model.trainable_variables);
+        optimizer.apply_gradients(zip(grads,model.trainable_variables));
+        #save model
+        if tf.equal(optimizer.iterations % 100, 0):
+            checkpoint.save(os.path.join('checkpoints','ckpt'));
         if loss < 0.01: break;
     #save the network structure with weights
     if False == os.path.exists('model'): os.mkdir('model');
